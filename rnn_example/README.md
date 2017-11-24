@@ -1,7 +1,7 @@
 # RNN
 Build my first RNN (Requrent Neural Network)
-using info from [deeplearingbook.org](http://www.deeplearningbook.org/contents/rnn.html)
-and following tutorial in [Wild ML blog](http://www.wildml.com/)
+using info from the [deeplearingbook.org](http://www.deeplearningbook.org/contents/rnn.html) Ch.10 
+and following a tutorial in [Wild ML blog](http://www.wildml.com/)
 
 ### Requirements
 - Python3
