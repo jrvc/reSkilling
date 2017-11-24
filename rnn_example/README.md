@@ -8,5 +8,5 @@ and following tutorial in [Wild ML blog](http://www.wildml.com/)
 - pip
 - Install requirements:
 ````bash
-install requirements.txt
+pip install -r requirements.txt
 ````
