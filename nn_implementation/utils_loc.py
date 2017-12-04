@@ -87,3 +87,13 @@ def predict(W1, b1, W2, b2, x):
     exp_scores = np.exp(z3)
     a3 = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)
     return np.argmax(a3, axis=1)
+
+
+def random_init(nn_input_dim, nn_hdim, nn_output_dim):
+    np.random.seed(10)
+    W1 = np.random.randn(nn_input_dim, nn_hdim) / np.sqrt(nn_input_dim)
+    b1 = np.zeros((1, nn_hdim))
+    W2 = np.random.randn(nn_hdim, nn_output_dim) / np.sqrt(nn_hdim)
+    #cardW2 = nn_hdim * nn_output_dim
+    b2 = np.zeros((1, nn_output_dim))
+    return (b1, W1, b2, W2)
