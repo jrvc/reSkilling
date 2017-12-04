@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Nov 2017
-
+FROM SCRATCH
 Build a 3-layer neural network with 1 input layer, 1 hidden layer and 1 output layer. 
     The number of nodes in the input  layer is 2; the dimensionality of our data.
     The number of nodes in the output layer is 2; the number of classes we have.
@@ -65,12 +64,9 @@ reg_lambda = 0.01 # regularization strength
 
 # Initialize the parameters to random values. We need to learn these.
 np.random.seed(10)
-W1 = np.random.randn(nn_input_dim, nn_hdim) / np.sqrt(nn_input_dim)
+b1, W1, b2, W2 = utils_loc.random_init(nn_input_dim, nn_hdim, nn_output_dim)
 cardW1 = nn_input_dim * nn_hdim
-b1 = np.zeros((1, nn_hdim))
-W2 = np.random.randn(nn_hdim, nn_output_dim) / np.sqrt(nn_hdim)
 #cardW2 = nn_hdim * nn_output_dim
-b2 = np.zeros((1, nn_output_dim))
 
 # generate an unrolled vector of parameters
 initial_grad = np.append(np.append(b1, (W1).ravel()), np.append(b2, (W2).ravel() ) )
