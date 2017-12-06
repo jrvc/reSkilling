@@ -86,6 +86,18 @@ train = theano.function([mlp_input, mlp_target], cost,
 mlp_output = theano.function([mlp_input], mlp.output(mlp_input))
 
 
+x_min, x_max = X[0,:].min() - .5, X[0,:].max() + .5
+y_min, y_max = X[1,:].min() - .5, X[1,:].max() + .5
+h = 0.05
+xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+unraveled = np.array( [xx.ravel(), yy.ravel()] ).astype(theano.config.floatX)
+
+def plot_routine():
+    decisionBound = mlp_output(unraveled)
+    Z = decisionBound.reshape(xx.shape)
+    plt.contourf(xx, yy, Z.round(), cmap=plt.cm.Spectral)
+    plt.scatter(X[0,:], X[1,:], c=y, cmap=plt.cm.Spectral)
+    
 
 iterat = 0
 max_iter = 20
@@ -97,19 +109,11 @@ while iterat < max_iter:
     current_cost = train(X, y)
     current_output = mlp_output(X)
     accuracy = np.mean((current_output > .5) == y)
-    # Plot network output after each iteration
-    '''plt.figure(figsize=(8, 8))
-    plt.scatter(X[0, :], X[1, :], c=current_output>.5,
-                lw=.3, s=3, cmap=plt.cm.cool, vmin=0, vmax=1)
-    plt.axis([-6, 6, -6, 6])
-    plt.title('Cost: {:.3f}, Accuracy: {:.3f}'.format(float(current_cost), accuracy))
-    plt.show()
-    iterat += 1'''
+    ''' Plot network output after each iteration'''
+    plot_routine()
+    iterat += 1
     
     
-utils_loc.plot_decision_boundary( (lambda x: utils_loc.predict(W1, b1, W2, b2, x)), X, y )
-plt.title("Decision Boundary of initial Parameters")
 
 utils_loc.plot_decision_boundary( (lambda x: utils_loc.predict_sigmoid(W_init[0].T, b_init[0].T, W_init[1].T, b_init[1].T, x)), X.T, y)
-
 plt.title("Decision Boundary of initial Parameters")
