@@ -163,6 +163,9 @@ plt.title("Decision Boundary for hidden layer size "+ str( nn_hdim))
     trying to answer:
     ????
     Can one use Theano functions in op.minimize()????
+
+theano.config.floatX = 'float32'
+
     
 W1.set_value(np.random.randn(nn_input_dim, nn_hdim) / np.sqrt(nn_input_dim))
 b1.set_value(np.zeros(nn_hdim))
