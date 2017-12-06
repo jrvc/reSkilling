@@ -6,8 +6,8 @@ Created on Sat Dec  2 15:11:58 2017
 """
 import numpy as np
 import matplotlib.pyplot as plt
-
-
+import theano
+import theano.tensor as T
 
 def plot_decision_boundary(pred_func, X,y):
     # Set min and max values and give it some padding
@@ -36,7 +36,7 @@ def nn_costFn_TanH(initial_params, nn_input_dim, nn_hdim, nn_output_dim, X, y,  
     cardW1 = nn_input_dim*nn_hdim
     W1 = np.reshape( initial_params[nn_hdim:(nn_hdim + cardW1)], (nn_input_dim, nn_hdim) )
     b2 = initial_params[(nn_hdim + cardW1):(nn_hdim + cardW1 + nn_output_dim)]
-    cardW2 = nn_hdim * nn_output_dim
+    #cardW2 = nn_hdim * nn_output_dim
     W2 = np.reshape( initial_params[(nn_hdim + cardW1 + nn_output_dim):], (nn_hdim, nn_output_dim) )
 
     #(nn_params, input_layer_size, hidden_layer_size, num_labels, X, y, lambda)
@@ -86,8 +86,25 @@ def predict(W1, b1, W2, b2, x):
     z3 = a2.dot(W2) + b2
     exp_scores = np.exp(z3)
     a3 = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)
-    return np.argmax(a3, axis=1)
+    return a3 #np.argmax(a3, axis=1) # np.tanh(z3)
 
+
+def sigmoid(z):
+    return (1/(1+np.exp(-z)))
+
+def predict_sigmoid(W1, b1, W2, b2, x):
+    ''' using in: 
+                nn2.py
+    Different than predict, in the fact than nn2.py constructs a single unit output
+    hence, there is no need to construct a return np.argmax(a3, axix=1), simply return a3
+    '''
+    # Forward propagation
+    a1 = (x).copy()
+    z2 = a1.dot(W1) + b1
+    a2 = sigmoid(z2)
+    z3 = a2.dot(W2) + b2
+    a3 = sigmoid(z3)
+    return np.round(a3)
 
 def random_init(nn_input_dim, nn_hdim, nn_output_dim):
     np.random.seed(10)
@@ -97,3 +114,43 @@ def random_init(nn_input_dim, nn_hdim, nn_output_dim):
     #cardW2 = nn_hdim * nn_output_dim
     b2 = np.zeros((1, nn_output_dim))
     return (b1, W1, b2, W2)
+
+
+
+def gradient_updates_momentum(cost, params, learning_rate, momentum):
+    '''
+    Compute updates for gradient descent with momentum
+    
+    :parameters:
+        - cost : theano.tensor.var.TensorVariable
+            Theano cost function to minimize
+        - params : list of theano.tensor.var.TensorVariable
+            Parameters to compute gradient against
+        - learning_rate : float
+            Gradient descent learning rate
+        - momentum : float
+            Momentum parameter, should be at least 0 (standard gradient descent) and less than 1
+   
+    :returns:
+        updates : list
+            List of updates, one for each parameter
+    '''
+    # Make sure momentum is a sane value
+    assert momentum < 1 and momentum >= 0
+    # List of update steps for each parameter
+    updates = []
+    # Just gradient descent on cost
+    for param in params:
+        # For each parameter, we'll create a previous_step shared variable.
+        # This variable will keep track of the parameter's update step across iterations.
+        # We initialize it to 0
+        previous_step = theano.shared(param.get_value()*0., broadcastable=param.broadcastable)
+        # Each parameter is updated by taking a step in the direction of the gradient.
+        # However, we also "mix in" the previous step according to the given momentum value.
+        # Note that we don't need to derive backpropagation to compute updates - just use T.grad!
+        step = momentum*previous_step - learning_rate*T.grad(cost, param)
+        # Add an update to store the previous step value
+        updates.append((previous_step, step))
+        # Add an update to apply the gradient descent step to the parameter itself
+        updates.append((param, param + step))
+    return updates

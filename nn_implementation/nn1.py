@@ -44,6 +44,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets
 import scipy.optimize as op
+import os
+os.chdir('C:\\Users\\Raul Vazquez\\Desktop\\reSkilling\\reSkilling\\nn_implementation')
 import utils_loc
 
 # Generate a dataset and plot it
