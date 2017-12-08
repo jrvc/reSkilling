@@ -25,7 +25,7 @@ def plot_decision_boundary(pred_func, X,y):
     
     
 
-def nn_costFn_TanH(initial_params, nn_input_dim, nn_hdim, nn_output_dim, X, y,  reg_lambda):
+def nn_costFn_TanH(initial_params, nn_input_dim, nn_hdim, nn_output_dim, X, y,  reg_lambda, *args):
     '''
     Forward propagation to compute the value of the loss function
     Backward propagation to compute the value of the gradient of the loss function 
@@ -86,7 +86,7 @@ def predict(W1, b1, W2, b2, x):
     z3 = a2.dot(W2) + b2
     exp_scores = np.exp(z3)
     a3 = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)
-    return a3 #np.argmax(a3, axis=1) # np.tanh(z3)
+    return np.argmax(a3, axis=1) # np.tanh(z3)
 
 
 def sigmoid(z):
