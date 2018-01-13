@@ -8,4 +8,4 @@ This is a personal project repository. Created mainly to learn interesting skill
  - deeplearning.ai = contains my solutions to exercises from the series of courses with same name from coursera.
 
 ##### Discalimer:
-Most of the codes are originally from other authors, I modify them for submitting HWs, to play around and to get a better insight from them. 
+Some of the codes might originally belong to other authors. If that is the case, I have (partially or totally) modified them -for submitting HWs, to get a better insight from how they work and to play around with them. 
