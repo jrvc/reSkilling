@@ -218,6 +218,13 @@ plt.show()
 
 
 ''' LOOKS LIKE OVERFITTING!!!! '''
-plt.plot(np.append(y['train'],y['test'])),plt.plot(np.append(y['train'],predicted))
 
-plt.plot(regressor.predict(X['val'])),plt.plot(y['val'])
+
+plt.plot(y['test'][0:50]),plt.plot(predicted[1:51])
+
+val_pred = regressor.predict(X['val'])
+plot_pred_val = plt.plot(val_pred[21:51], label = 'predicted'),
+plot_val = plt.plot(y['val'][20:50], label = 'observed')
+plt.legend()
+plt.show()
+score2 = regressor.score(X['val'][:-1],y['val'][1:])
